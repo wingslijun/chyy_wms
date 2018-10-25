@@ -210,9 +210,8 @@ class AppConstant {
 class AppICons {
   static const String FONT_FAMILY = 'wxcIconFont';
 
-  static const String DEFAULT_USER_ICON = 'static/images/logo.png';
+  static const String DEFAULT_USER_ICON = 'static/images/admin.png';
   static const String DEFAULT_IMAGE = 'static/images/default_img.png';
-  static const String DEFAULT_REMOTE_PIC = 'https://raw.githubusercontent.com/CarGuo/GSYGithubAppFlutter/master/static/images/logo.png';
 
   static const IconData HOME = const IconData(0xe624, fontFamily: AppICons.FONT_FAMILY);
   static const IconData MORE = const IconData(0xe674, fontFamily: AppICons.FONT_FAMILY);

@@ -49,7 +49,7 @@ class _ProcessMonitorState extends State<ProcessMonitor>{
   int page = 1;
   List<Widget> tiles = [];
   List<Widget>  bottomWidgets =[];
-  String imageUrl="https://linkortech.com/mes-yunmu/static/img/yunmu.ead51c0.png";
+  String imageUrl="https://chuyiyu.com/mes-yunmu/static/img/yunmu.ead51c0.png";
 
   var item = {
     "1" : {'temp1':'机筒温控1','temp2':'机筒温控2','temp3':'机筒温控3','temp4':'机筒温控4','temp6':'合流芯温控','temp7':'模具温控1','temp8':'模具温控2','temp9':'模具温控3','temp10':'模具温控4','temp11':'模具温控5'},
@@ -498,7 +498,7 @@ class _ProcessMonitorState extends State<ProcessMonitor>{
   }
   _topPartRow() {
     if(widget.id=="9"){
-    imageUrl = "https://linkortech.com/mes-yunmu/static/img/yunmu2.175a77c.png";
+    imageUrl = "https://chuyiyu.com/mes-yunmu/static/img/yunmu2.175a77c.png";
     }
     return  new Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -516,9 +516,7 @@ class _ProcessMonitorState extends State<ProcessMonitor>{
 //               //   width: 280.0,height: 200.0,
 //                )
               */
-/* new Image.asset('static/images/sheeben.png',
-                width: 280.0,height: 200.0,
-              )*//*
+/* *//*
 
             ),
           ]

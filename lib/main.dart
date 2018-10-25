@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
       child: //new StoreBuilder<AppState>(builder: (context, store) {
         new MaterialApp(
             // 默认路由
-            home: new Login(),
+            home: new HomePage(),
       //      debugShowMaterialGrid: true,
             theme: new ThemeData(
               primarySwatch:Colors.blue,

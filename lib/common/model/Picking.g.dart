@@ -13,9 +13,8 @@ Picking _$PickingFromJson(Map<String, dynamic> json) {
       json['time'] as String,
       json['status'] as String,
       (json['subProducts'] as List)
-          ?.map((e) => e == null
-              ? null
-              : SubProducts.fromJson(e as Map<String, dynamic>))
+          ?.map((e) =>
+              e == null ? null : SubProduct.fromJson(e as Map<String, dynamic>))
           ?.toList());
 }
 
@@ -27,22 +26,19 @@ Map<String, dynamic> _$PickingToJson(Picking instance) => <String, dynamic>{
       'subProducts': instance.subProducts
     };
 
-SubProducts _$SubProductsFromJson(Map<String, dynamic> json) {
-  return SubProducts()
-    ..id = json['id']
-    ..name = json['name']
-    ..location = json['location']
-    ..code = json['code']
-    ..img = json['img']
-    ..num = json['num'];
+SubProduct _$SubProductFromJson(Map<String, dynamic> json) {
+  return SubProduct(json['id'], json['sku'], json['name'], json['location'],
+      json['code'], json['img'], json['num'], json['areadyNum']);
 }
 
-Map<String, dynamic> _$SubProductsToJson(SubProducts instance) =>
+Map<String, dynamic> _$SubProductToJson(SubProduct instance) =>
     <String, dynamic>{
       'id': instance.id,
+      'sku': instance.sku,
       'name': instance.name,
       'location': instance.location,
       'code': instance.code,
       'img': instance.img,
-      'num': instance.num
+      'num': instance.num,
+      'areadyNum': instance.areadyNum
     };

@@ -1,6 +1,6 @@
 # chyy_app
 
-linkortech mes app
+chuyiyu mes app
 
 ## Getting Started
 

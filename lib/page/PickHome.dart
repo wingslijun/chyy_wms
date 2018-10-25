@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'dart:collection';
 
+import 'package:chyy_app/common/config/Config.dart';
+import 'package:chyy_app/page/homeDrawer.dart';
+import 'package:chyy_app/utils/CommonUtils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:chyy_app/common/model/Picking.dart';
@@ -12,74 +15,127 @@ import 'package:chyy_app/test3.dart';
 import 'package:chyy_app/utils/NavigatorUtils.dart';
 import 'package:chyy_app/widget/AppListState.dart';
 import 'package:chyy_app/widget/AppPullLoadWidget.dart';
-import 'package:chyy_app/widget/DeviceItem.dart';
+import 'package:chyy_app/widget/PickingItem.dart';
 import 'package:chyy_app/widget/LKTDeviceStateCard.dart';
 import 'package:chyy_app/widget/LKTTabButton.dart';
 import 'package:chyy_app/widget/LKTDeviceCard.dart';
 import 'package:chyy_app/dao/PickingDao.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:redux/redux.dart';
 
 class PickHome extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => new _PickHomeState();
 }
-class _PickHomeState extends AppListState<PickHome> {
+class _PickHomeState extends State<PickHome> with AutomaticKeepAliveClientMixin<PickHome>, AppListState<PickHome> {
 
-  _renderItem(e) {
-    Picking picking = Picking.fromJson(e);
-    return new DeviceItem(picking, onPressed: () {
+  static TrendTypeModel selectTime = null;
+
+  static TrendTypeModel selectType = null;
+  _renderItem(index) {
+
+    return new PickingItem(pullLoadWidgetControl.dataList[index], onPressed: () {
     //  NavigatorUtils.goProcessMonitor(context,deviceViewModel.id,deviceViewModel.name);
     });
   }
 
+  _getDataLogic() async {
+    print("$page  ");
+    return await PickingDao.listPickings(page,Config.PAGE_SIZE);
+  }
+
   @override
-  Future<Null> handleRefresh() async {
-    if (isLoading) {
-      return null;
-    }
-    isLoading = true;
-    page = 1;
-    await PickingDao.listPickings(_getStore());
-    setState(() {
-      pullLoadWidgetControl.needLoadMore = false;
-    });
-    isLoading = false;
-    return null;
+  bool get wantKeepAlive => true;
+
+  @override
+  bool get needHeader => false;
+
+  @override
+  bool get isRefreshFirst => true;
+
+  @override
+  requestLoadMore() async {
+    return await _getDataLogic();
   }
 
   @override
   requestRefresh() async {
-    return null;
+    return await _getDataLogic();
   }
-
-  @override
-  requestLoadMore() async {
-    return null;
-  }
-
-  @override
-  bool get isRefreshFirst => false;
 
   @override
   void didChangeDependencies() {
-    pullLoadWidgetControl.dataList = _getStore().state.pickingList;
-    if (pullLoadWidgetControl.dataList.length == 0) {
       setState(() {
+        selectTime = trendTime(context)[0];
+        selectType = trendType(context)[0];
       });
       showRefreshLoading();
+      super.didChangeDependencies();
+  }
+
+  _renderHeader(Store<AppState> store) {
+    if (selectType == null && selectType == null) {
+      return Container();
     }
-    super.didChangeDependencies();
+    return new Card(
+      color: AppTheme.main_color,
+      margin: EdgeInsets.all(10.0),
+      shape: new RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(4.0)),
+      ),
+      child: new Padding(
+        padding: new EdgeInsets.only(left: 0.0, top: 5.0, right: 0.0, bottom: 5.0),
+        child: new Row(
+          children: <Widget>[
+            _renderHeaderPopItem(selectTime.name, trendTime(context), (TrendTypeModel result) {
+              if (isLoading) {
+                Fluttertoast.showToast(msg: "加载中");
+                return;
+              }
+              setState(() {
+                selectTime = result;
+              });
+              showRefreshLoading();
+            }),
+            new Container(height: 10.0, width: 0.5,color: Colors.white,),
+            _renderHeaderPopItem(selectType.name, trendType(context), (TrendTypeModel result) {
+              if (isLoading) {
+                Fluttertoast.showToast(msg:"加载中");
+                return;
+              }
+              setState(() {
+                selectType = result;
+              });
+              showRefreshLoading();
+            }),
+          ],
+        ),
+      ),
+    );
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    clearData();
-  }
-  Store<AppState> _getStore() {
-    return StoreProvider.of(context);
+  _renderHeaderPopItem(String data, List<TrendTypeModel> list, PopupMenuItemSelected<TrendTypeModel> onSelected) {
+    return new Expanded(
+      child: new PopupMenuButton<TrendTypeModel>(
+        child: new Center(child: new Text(data,style: AppConstant.middleTextWhiteBold,)),
+        onSelected: onSelected,
+        itemBuilder: (BuildContext context) {
+          return _renderHeaderPopItemChild(list);
+        },
+      ),
+    );
   }
 
+  _renderHeaderPopItemChild(List<TrendTypeModel> data) {
+    List<PopupMenuEntry<TrendTypeModel>> list = new List();
+    for (TrendTypeModel item in data) {
+      list.add(PopupMenuItem<TrendTypeModel>(
+        value: item,
+        child: new Text(item.name),
+      ));
+    }
+    return list;
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -87,15 +143,53 @@ class _PickHomeState extends AppListState<PickHome> {
     return new StoreBuilder<AppState>(
       builder: (context, store) {
         return new Scaffold(
+          drawer: new HomeDrawer(),
+          appBar: new AppBar(
+            title: new Text("待拣货"),
+            backgroundColor: AppTheme.main_color,
+        ),
           backgroundColor: AppTheme.background_color,
-          body: AppPullLoadWidget(
-            pullLoadWidgetControl, (BuildContext context, int index) => _renderItem(pullLoadWidgetControl.dataList[index]),
-            handleRefresh,
-            onLoadMore,
-            refreshKey: refreshIndicatorKey,
+          body: new Scaffold(
+            appBar: new AppBar(
+              backgroundColor: AppTheme.background_color,
+              flexibleSpace: _renderHeader(store),
+              leading: new Container(),
+              elevation: 0.0,
+            ),
+            backgroundColor: AppTheme.background_color,
+            body: AppPullLoadWidget(
+              pullLoadWidgetControl, (BuildContext context, int index) => _renderItem(index),
+              handleRefresh,
+              onLoadMore,
+              refreshKey: refreshIndicatorKey,
+            ) ,
           ),
         );
       },
     );
   }
+}
+class TrendTypeModel {
+  final String name;
+  final String value;
+
+  TrendTypeModel(this.name, this.value);
+}
+
+trendTime(BuildContext context) {
+  return [
+    new TrendTypeModel("全部批次", null),
+    new TrendTypeModel("批次:2018101001GZ", "2018101001GZ"),
+    new TrendTypeModel("批次:2018101001GZ", "2018101001GZ"),
+    new TrendTypeModel("批次:2018101001GZ", "2018101001GZ"),
+  ];
+}
+
+trendType(BuildContext context) {
+  return [
+    TrendTypeModel("全部状态", null),
+    TrendTypeModel("未拣货", "Java"),
+    TrendTypeModel("部分拣货", "Java"),
+
+  ];
 }

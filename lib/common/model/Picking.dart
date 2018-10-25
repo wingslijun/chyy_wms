@@ -1,4 +1,7 @@
-
+/**
+ * flutter packages pub run build_runner build
+ * flutter packages pub run build_runner watch
+ */
 import 'package:json_annotation/json_annotation.dart';
 
 part 'Picking.g.dart';
@@ -9,7 +12,7 @@ class Picking extends Object {
   String orderNum;
   String time;
   String status;
-  List<SubProducts> subProducts;
+  List<SubProduct> subProducts;
   Picking(
     this.id,
     this.orderNum,
@@ -23,22 +26,24 @@ class Picking extends Object {
   /// The constructor is named after the source class, in this case User.
   factory Picking.fromJson(Map<String, dynamic> json) => _$PickingFromJson(json);
 
-  Picking.empty();
 }
 
 
 @JsonSerializable()
-class SubProducts {
+class SubProduct {
   var id;
+  var sku;
   var name;
   var location;
   var code;
   var img;
   var num;
+  var areadyNum;
 
 
-  SubProducts();
+  SubProduct(this.id,this.sku,this.name,this.location,this.code,this.img,this.num,this.areadyNum);
 
-  factory SubProducts.fromJson(Map<String, dynamic> json) => _$SubProductsFromJson(json);
+  factory SubProduct.fromJson(Map<String, dynamic> json) => _$SubProductFromJson(json);
+
 }
 
