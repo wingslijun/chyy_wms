@@ -11,54 +11,46 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter/services.dart';
 
 
-class PickingItem extends StatefulWidget {
+class PickingItem extends StatelessWidget {
   final Picking pickingInfo;
   final VoidCallback onPressed;
   PickingItem(this.pickingInfo, {this.onPressed}) : super();
-  @override
-  State<StatefulWidget> createState() {
-    return new _PickingItem();
-  }
 
-}
-class _PickingItem extends State<PickingItem>{
 
   String barcode = "";
-
-
   Future scan(orderId,code,num) async {
     try {
       String barcode = await BarcodeScanner.scan();
-      setState(() => this.barcode = barcode);
+    
       if(code==barcode){
         //查询已扫描数  需扫次数大于等于已扫时提醒否则增加已扫次数
         if(true){
-          PickingDao.updateOrderProductNum(orderId,code,1).then((ret){
-            widget.pickingInfo.subProducts.forEach((item){
-              if(item.code == code) {
-                setState(() {
-                  item.areadyNum = item.areadyNum+1;
-                });
+        //  PickingDao.updateOrderProductNum(orderId,code,1).then((ret){
 
+              for(var i =0;i<this.pickingInfo.subProducts.length;i++){
+                if(this.pickingInfo.subProducts[i].code == code) {
+                  this.pickingInfo.subProducts[i].areadyNum = this.pickingInfo.subProducts[i].areadyNum+1;
+                  break;
+                }
               }
-            });
-          });
+      //    });
         }else{
           ToastUtils.normalMsg("此单此物已拣够。。");
         }
       }
+      print(barcode);
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.CameraAccessDenied) {
-        setState(() {
+       
           this.barcode = 'The user did not grant the camera permission!';
-        });
       } else {
-        setState(() => this.barcode = 'Unknown error: $e');
+       this.barcode = 'Unknown error: $e';
       }
-    } on FormatException{
-      setState(() => this.barcode = 'null (User returned using the "back"-button before scanning anything. Result)');
-    } catch (e) {
-      setState(() => this.barcode = 'Unknown error: $e');
+    } on FormatException {
+      this.barcode =
+      'null (User returned using the "back"-button before scanning anything. Result)';
+    }catch (e) {
+       this.barcode = 'Unknown error: $e';
     }
 
   }
@@ -74,18 +66,9 @@ class _PickingItem extends State<PickingItem>{
     print("permission is " + res.toString());
   }
 
-  List<Widget> products;
-
-  @override
-  void didChangeDependencies() {
-    _buildProductItem();
-    super.didChangeDependencies();
-  }
-
-
-  List<Widget>  _buildProductItem(){
-    List<Widget> _products;
-    widget.pickingInfo.subProducts.forEach((item){
+    List<Widget>  _buildProductItem(BuildContext context){
+    List<Widget> _products = new List();
+    this.pickingInfo.subProducts.forEach((item){
       _products.add(
         new Container(
           padding: EdgeInsets.only(top: 2.0,bottom: 2.0),
@@ -171,15 +154,13 @@ class _PickingItem extends State<PickingItem>{
                                               child: new Text("扫码拣货", textScaleFactor: 1.0,
                                                   style: new TextStyle(color: Colors.white)),
                                               onPressed: () {
-                                                scan(widget.pickingInfo.orderNum,item.code,item.num);
+                                                scan(this.pickingInfo.orderNum,item.code,item.num);
                                               },
                                             )
                                         )],
                                     ) ),
                                   ],
                                 )
-
-
                             )
                           ],
                         )),
@@ -191,14 +172,15 @@ class _PickingItem extends State<PickingItem>{
         ),
       );
     });
-    setState(() {
-      products =  _products;
-    });
+   if(_products.length==0){
+     _products.add(new Text("此单异常没有商品！"));
+   }
+    return _products;
   }
   @override
   Widget build(BuildContext context) {
     var color;
-    switch (widget.pickingInfo.status) {
+    switch (this.pickingInfo.status) {
       case "working":
         color = Colors.green;
         break;
@@ -211,7 +193,7 @@ class _PickingItem extends State<PickingItem>{
     }
     return new MaterialButton(
         padding: EdgeInsets.only(left: 5.0, right: 5.0),
-        onPressed: widget.onPressed,
+        onPressed:this.onPressed,
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(2.0),
@@ -238,7 +220,7 @@ class _PickingItem extends State<PickingItem>{
                             new Row(
                               children: <Widget>[
                                 new Text(
-                                  "订单号：${widget.pickingInfo.orderNum}",
+                                  "订单号：${this.pickingInfo.orderNum}",
                                   style: AppConstant.middleTextBold,
                                 ),
                               ],
@@ -246,13 +228,13 @@ class _PickingItem extends State<PickingItem>{
                             new Row(
                               children: <Widget>[
                                 new Text(
-                                  "批次：${widget.pickingInfo.id}",
+                                  "批次：${this.pickingInfo.id}",
                                   style: AppConstant.middleTextBold,
                                 ),
                                 new Expanded(child: Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: <Widget>[
-                                    new Text("时间：${widget.pickingInfo.time}",
+                                    new Text("时间：${this.pickingInfo.time}",
                                       style: AppConstant.middleTextBold,)
                                   ],))
 
@@ -270,8 +252,8 @@ class _PickingItem extends State<PickingItem>{
                             padding: EdgeInsets.only(top: 2.0,bottom: 2.0),
                             child:Card(
                               child: new Column(
-                                children: products,
-//                                <Widget>[
+                                children: _buildProductItem(context),
+  //                                <Widget>[
 //                                  new Row(
 //                                    children: <Widget>[
 //                                      new Container(
