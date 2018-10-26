@@ -178,7 +178,6 @@ class TrendTypeModel {
 
 trendTime(BuildContext context) {
   return [
-    new TrendTypeModel("全部批次", null),
     new TrendTypeModel("批次:2018101001GZ", "2018101001GZ"),
     new TrendTypeModel("批次:2018101001GZ", "2018101001GZ"),
     new TrendTypeModel("批次:2018101001GZ", "2018101001GZ"),
@@ -187,9 +186,18 @@ trendTime(BuildContext context) {
 
 trendType(BuildContext context) {
   return [
-    TrendTypeModel("全部状态", null),
-    TrendTypeModel("未拣货", "Java"),
-    TrendTypeModel("部分拣货", "Java"),
-
+    TrendTypeModel("全部", null),
+    TrendTypeModel("Java", "Java"),
+    TrendTypeModel("Kotlin", "Kotlin"),
+    TrendTypeModel("Dart", "Dart"),
+    TrendTypeModel("Objective-C", "Objective-C"),
+    TrendTypeModel("Swift", "Swift"),
+    TrendTypeModel("JavaScript", "JavaScript"),
+    TrendTypeModel("PHP", "PHP"),
+    TrendTypeModel("Go", "Go"),
+    TrendTypeModel("C++", "C++"),
+    TrendTypeModel("C", "C"),
+    TrendTypeModel("HTML", "HTML"),
+    TrendTypeModel("CSS", "CSS"),
   ];
 }
