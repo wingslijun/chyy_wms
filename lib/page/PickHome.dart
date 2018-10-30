@@ -33,16 +33,21 @@ class _PickHomeState extends State<PickHome> with AutomaticKeepAliveClientMixin<
 
   static TrendTypeModel selectType = null;
   _renderItem(index) {
-
-    return new PickingItem(pullLoadWidgetControl.dataList[index], onPressed: () {
-    //  NavigatorUtils.goProcessMonitor(context,deviceViewModel.id,deviceViewModel.name);
-    });
+    var picking = pullLoadWidgetControl.dataList[index];
+    void _handleTapboxChanged(Picking newPicking) {
+      setState(() {
+        picking = newPicking;
+      });
+    }
+    return new PickingItem(pickingInfo: picking,onChanged:_handleTapboxChanged,);
   }
 
   _getDataLogic() async {
     print("$page  ");
     return await PickingDao.listPickings(page,Config.PAGE_SIZE);
   }
+
+
 
   @override
   bool get wantKeepAlive => true;
@@ -143,19 +148,22 @@ class _PickHomeState extends State<PickHome> with AutomaticKeepAliveClientMixin<
     return new StoreBuilder<AppState>(
       builder: (context, store) {
         return new Scaffold(
-          drawer: new HomeDrawer(),
-          appBar: new AppBar(
-            title: new Text("待拣货"),
+        //  drawer: new HomeDrawer(),
+          appBar:
+          PreferredSize(child:  new AppBar(
+            title: new Text("待拣货",style: TextStyle(fontSize: 12.0),),
             backgroundColor: AppTheme.main_color,
-        ),
+          ) ,
+              preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.04))
+        ,
           backgroundColor: AppTheme.background_color,
           body: new Scaffold(
-            appBar: new AppBar(
-              backgroundColor: AppTheme.background_color,
-              flexibleSpace: _renderHeader(store),
-              leading: new Container(),
-              elevation: 0.0,
-            ),
+//            appBar: new AppBar(
+//              backgroundColor: AppTheme.background_color,
+//             // flexibleSpace: _renderHeader(store),
+//              leading: new Container(),
+//              elevation: 0.0,
+//            ),
             backgroundColor: AppTheme.background_color,
             body: AppPullLoadWidget(
               pullLoadWidgetControl, (BuildContext context, int index) => _renderItem(index),
@@ -178,6 +186,7 @@ class TrendTypeModel {
 
 trendTime(BuildContext context) {
   return [
+    new TrendTypeModel("全部", null),
     new TrendTypeModel("批次:2018101001GZ", "2018101001GZ"),
     new TrendTypeModel("批次:2018101001GZ", "2018101001GZ"),
     new TrendTypeModel("批次:2018101001GZ", "2018101001GZ"),
@@ -187,17 +196,7 @@ trendTime(BuildContext context) {
 trendType(BuildContext context) {
   return [
     TrendTypeModel("全部", null),
-    TrendTypeModel("Java", "Java"),
-    TrendTypeModel("Kotlin", "Kotlin"),
-    TrendTypeModel("Dart", "Dart"),
-    TrendTypeModel("Objective-C", "Objective-C"),
-    TrendTypeModel("Swift", "Swift"),
-    TrendTypeModel("JavaScript", "JavaScript"),
-    TrendTypeModel("PHP", "PHP"),
-    TrendTypeModel("Go", "Go"),
-    TrendTypeModel("C++", "C++"),
-    TrendTypeModel("C", "C"),
-    TrendTypeModel("HTML", "HTML"),
-    TrendTypeModel("CSS", "CSS"),
+    TrendTypeModel("未拣货", "1"),
+    TrendTypeModel("部分拣货", "2"),
   ];
 }
