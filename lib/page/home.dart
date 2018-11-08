@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:chyy_app/page/OrderItem.dart';
 import 'package:chyy_app/page/PrintExpress.dart';
 import 'package:chyy_app/page/index.dart';
 import 'package:flutter/material.dart';
@@ -69,7 +70,7 @@ class HomePage extends StatelessWidget {
         tabViews: [
           new Index(),
           new PickHome(),
-          new PrintExpress(),
+          new OrderItem(),
           new Index(),
         ],
         backgroundColor: AppTheme.background_color,

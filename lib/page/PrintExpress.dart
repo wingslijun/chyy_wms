@@ -28,6 +28,8 @@ class _PrintExpressState extends State<PrintExpress>
   String barcode = "";
   List<Tab> myTabs = <Tab>[];
 
+  static const EventChannel _status_channel = const EventChannel('chyy_scanner_plugin.barcode');
+
   @override
   void dispose() {
     _tabController.dispose();
@@ -42,7 +44,20 @@ class _PrintExpressState extends State<PrintExpress>
      suProductList.add(sunPicking);
      pickingInfo = new Picking("--", "--", "--", "--", suProductList);
     _tabController = new TabController(vsync: this, length: myTabs.length);
-  } //扫描周转箱
+    _status_channel.receiveBroadcastStream().listen(_onGetCode, onError: _onGetCodeError);
+  }
+  var _barcode;
+  // MediaPlayer状态改变事件处理
+  void _onGetCode(Object event) {
+    setState(() {
+      _barcode = event;
+    });
+  }
+  void _onGetCodeError(Object event) {
+    print(event);
+  }
+
+  //扫描周转箱
   Future scan(code) async {
     try {
       String barcode = await BarcodeScanner.scan();
@@ -190,16 +205,12 @@ class _PrintExpressState extends State<PrintExpress>
   @override
   bool get wantKeepAlive => true;
 
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
   }
 
-
   Widget _buildPs(color){
-
     return new Center(
         child: Padding(
             padding: const EdgeInsets.all(1.0),
@@ -377,7 +388,11 @@ class _PrintExpressState extends State<PrintExpress>
                               ))
                         ],
                       ),
-                    )))));
+                    )
+                )
+            )
+        )
+    );
   }
 
   @override
@@ -395,8 +410,6 @@ class _PrintExpressState extends State<PrintExpress>
         color = Colors.green;
         break;
     }
-
-
     return new StoreBuilder<AppState>(
       builder: (context, store) {
         return new Scaffold(
@@ -416,6 +429,7 @@ class _PrintExpressState extends State<PrintExpress>
           backgroundColor: AppTheme.background_color,
           body: new ListView(
             children: <Widget>[
+              new Text("barcode:$_barcode"),
               new Container(
                 child: new RaisedButton(
                     onPressed: () {
