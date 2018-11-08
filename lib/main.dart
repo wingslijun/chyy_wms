@@ -19,9 +19,9 @@ class MyApp extends StatelessWidget {
       appReducer,
       initialState:
       new AppState(
-          userInfo: User.empty(),
-          pickingList:new List(),
-          alarmList:new List(),
+        userInfo: User.empty(),
+        pickingList:new List(),
+        alarmList:new List(),
       )
   );
   MyApp({Key key}) : super(key: key);
@@ -34,22 +34,22 @@ class MyApp extends StatelessWidget {
       // Widgets will find and use this value as the `Store`.
       store: store,
       child: //new StoreBuilder<AppState>(builder: (context, store) {
-        new MaterialApp(
-            // 默认路由
-            home: new HomePage(),
-      //      debugShowMaterialGrid: true,
-            theme: new ThemeData(
+      new MaterialApp(
+        // 默认路由
+          home: new HomePage(),
+          //      debugShowMaterialGrid: true,
+          theme: new ThemeData(
               primarySwatch:Colors.blue,
               primaryColor:Colors.blueAccent
-            ),
-            routes: <String, WidgetBuilder>{
-              Login.pName: (BuildContext context) => new Login(),
-              HomePage.pName: (BuildContext context) => new HomePage(),
+          ),
+          routes: <String, WidgetBuilder>{
+            Login.pName: (BuildContext context) => new Login(),
+            HomePage.pName: (BuildContext context) => new HomePage(),
             /*  ProcessMonitor.pName: (BuildContext context) => new ProcessMonitor("1",true,"1号挤出机"),
               MonitorPage.pName: (BuildContext context) => new MonitorPage(),
               AlarmPage.pName: (BuildContext context) => new AlarmPage(true),*/
-          //  });
-      }),
+            //  });
+          }),
     );
   }
 }

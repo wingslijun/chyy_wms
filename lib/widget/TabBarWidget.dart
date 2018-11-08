@@ -156,13 +156,16 @@ class _TabBarState extends State<TabBarWidget>
       bottomNavigationBar: new Material(
         // 为了适配主题风格，包一层Material实现风格套用
         color: AppTheme.main_color, // 底部导航栏主题颜色
-        child: new TabBar(
-          // TabBar导航标签，底部导航放到Scaffold的bottomNavigationBar中
-          // 配置控制器
-          controller: _tabController,
-          tabs: _tabItems,
-          // tab标签的下划线颜色
-          indicatorColor: _indicatorColor,
+        child: Container(
+          height: 40.0,
+          child: new TabBar(
+            // TabBar导航标签，底部导航放到Scaffold的bottomNavigationBar中
+            // 配置控制器
+            controller: _tabController,
+            tabs: _tabItems,
+            // tab标签的下划线颜色
+            indicatorColor: _indicatorColor,
+          ),
         ),
       ));
   }

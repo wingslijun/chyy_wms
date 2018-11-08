@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:chyy_app/page/PrintExpress.dart';
 import 'package:chyy_app/page/index.dart';
 import 'package:flutter/material.dart';
 import 'package:chyy_app/page/AlarmPage.dart';
@@ -43,32 +44,32 @@ class HomePage extends StatelessWidget {
           new Tab(
             child: new Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[new Icon(Icons.home), new Text("主页",textScaleFactor: 1.0)],
+              children: <Widget>[ new Text("主页",textScaleFactor: 1.0)],
             ),
           ),
           new Tab(
             child: new Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[new Icon(Icons.list), new Text("拣货",textScaleFactor: 1.0,)],
+              children: <Widget>[new Text("拣货",textScaleFactor: 1.0,)],
             ),
           ),
           new Tab(
             child: new Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[new Icon(Icons.print), new Text("出库",textScaleFactor: 1.0,)],
+              children: <Widget>[ new Text("出库",textScaleFactor: 1.0,)],
             ),
           ),
           new Tab(
             child: new Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[new Icon(Icons.search), new Text("查询",textScaleFactor: 1.0,)],
+              children: <Widget>[ new Text("查询",textScaleFactor: 1.0,)],
             ),
           ),
         ],
         tabViews: [
           new Index(),
           new PickHome(),
-          new Index(),
+          new PrintExpress(),
           new Index(),
         ],
         backgroundColor: AppTheme.background_color,

@@ -12,20 +12,54 @@ import 'package:redux/redux.dart';
 
 class PickingDao {
 
-  static listPickings(page,pageSize) async {
-/*  var res = await HttpUtils.postForm("/rest/monitor/picking/list", {"needPartNum": "true"});
-    print(res["result"]);
-    if (res != null && res["result"]!=0) {
+  static listPickings( page,pageSize) async {
+    List paramList = new List();
+    paramList.add({"Name":"PageIndex","Value":page});
+    paramList.add({"Name":"PageSize","Value":"1"});
+    paramList.add({"Name":"TrackingId","Value":""});
+    paramList.add({"Name":"ImportLotNo","Value":""});
+    paramList.add({"Name":"ScheduleLotNo","Value":"20181102TJ"});
+    paramList.add({"Name":"LogisticsStatus","Value":""});
+    paramList.add({"Name":"SearchText","Value":""});
+    paramList.add({"Name":"HasRefundItem","Value":"0"});
+    paramList.add({"Name":"PickupBillPrintStatus","Value":"0"});
+    paramList.add({"Name":"ExpressBillPrintStatus","Value":"0"});
+
+    var params = {
+      "Method":"QueryLogisticsList",
+      "ParameterList":paramList
+    };
+    var paramsString = jsonEncode(params).toString();
+    paramsString =  paramsString.replaceAll("{", "%7B");
+    paramsString =    paramsString.replaceAll("\"", "%22");
+    paramsString =   paramsString.replaceAll("}", "%7D");
+    paramsString =  paramsString.replaceAll("[", "%5B");
+    paramsString =  paramsString.replaceAll("]", "%5D");
+
+
+  var res = await HttpUtils.postFormUrl("/api/api/dataexchange/exec?postString="+ paramsString);
+
+    if (res != null && res["Status"]["Success"]==1) {
       List<Picking> list = new List();
-      var listData = res["data"]["list"];
+      var listData = res["Data"]["LogisticsList"];
       if (listData == null || listData.length == 0) {
         return new DataResult(null, false);
       }
-      store.dispatch(new RefreshPickingAction(list));
+      for(var i = 0;i<listData.length;i++){
+          var data = listData[i];
+          List<SubProduct> suProductList = new List();
+          for(var j = 0;j<data["ItemList"].length;j++){
+            var item = data["ItemList"][j];
+            var sunPicking =  getSubProduct(item["PackageIndex"].toString(),item["SkuName"],item["Title"],"","",item["ItemPictureLink"],item["Count"],0);
+            suProductList.add(sunPicking);
+          }
+        Picking picking = new Picking(data["ImportLotNo"],data["TrackingId"],data["TimeModified"].toString().substring(0,data["TimeModified"].toString().length-4),"未拣货",suProductList);
+          list.add(picking);
+      }
       return new DataResult(list, true);
     } else {
      return new DataResult(null, false);
-   }*/
+   }
     List<Picking> list = new List();
 
 

@@ -22,7 +22,7 @@ class AppFlexButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new RaisedButton(
-        padding: new EdgeInsets.only(left: 20.0, top: 10.0, right: 20.0, bottom: 10.0),
+        padding: new EdgeInsets.only(left: 10.0, top: 10.0, right: 10.0, bottom: 10.0),
         textColor: textColor,
         color: color,
         child: new Flex(

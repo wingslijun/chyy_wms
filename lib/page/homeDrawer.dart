@@ -25,7 +25,7 @@ class HomeDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new StoreBuilder<AppState>(
-      builder: (context, store) {
+        builder: (context, store) {
         User user = store.state.userInfo;
         return new Drawer(
           ///侧边栏按钮Drawer
@@ -70,25 +70,7 @@ class HomeDrawer extends StatelessWidget {
                           onTap: () {
                             //ReposDao.getNewsVersion(context, true);
                           }),
-                      new ListTile(
-                          title: new Text(
-                            '服务信息',
-                            textScaleFactor: 1.0,
-                            style: AppConstant.normalText,
-                          ),
-                          onTap: () {
-                            NavigatorUtils.getServiceInfo(context);
-                          }),
-                     /* new ListTile(
-                          title: new Text(
-                            '关于',
-                            style: AppConstant.normalText,
-                          ),
-                          onTap: () {
-                            GetVersion.projectVersion.then((value) {
-                              showAboutDialog(context, value);
-                            });
-                          }),*/
+
                       new ListTile(
                           title: new AppFlexButton(
                             text: '退出登录',
@@ -96,13 +78,10 @@ class HomeDrawer extends StatelessWidget {
                             textColor: Color(AppColors.textWhite),
                             onPress: () {
                               UserDao.clearAll(store);
-                              //  EventDao.clearEvent(store);
                               NavigatorUtils.goLogin(context);
                             },
                           ),
-                          onTap: () {
-
-                          }),
+                      ),
                     ],
                   ),
                 ),

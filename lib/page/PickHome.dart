@@ -68,6 +68,7 @@ class _PickHomeState extends State<PickHome> with AutomaticKeepAliveClientMixin<
     return await _getDataLogic();
   }
 
+
   @override
   void didChangeDependencies() {
       setState(() {
@@ -143,35 +144,29 @@ class _PickHomeState extends State<PickHome> with AutomaticKeepAliveClientMixin<
   }
   @override
   Widget build(BuildContext context) {
-
     super.build(context); // See AutomaticKeepAliveClientMixin.
     return new StoreBuilder<AppState>(
       builder: (context, store) {
         return new Scaffold(
-        //  drawer: new HomeDrawer(),
-          appBar:
-          PreferredSize(child:  new AppBar(
-            title: new Text("待拣货",style: TextStyle(fontSize: 12.0),),
+          appBar: PreferredSize(child:  new AppBar(
+            leading: new Container(
+                child: IconButton(
+                  padding: EdgeInsets.all(3.0),
+                  icon: Icon(Icons.menu),
+                  onPressed: () => Scaffold.of(context).openDrawer(),
+                  tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+                )),
+            title: new Text("待拣货",
+            ),
             backgroundColor: AppTheme.main_color,
-          ) ,
-              preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.04))
-        ,
+          ) , preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.06)),
           backgroundColor: AppTheme.background_color,
-          body: new Scaffold(
-//            appBar: new AppBar(
-//              backgroundColor: AppTheme.background_color,
-//             // flexibleSpace: _renderHeader(store),
-//              leading: new Container(),
-//              elevation: 0.0,
-//            ),
-            backgroundColor: AppTheme.background_color,
-            body: AppPullLoadWidget(
+          body:AppPullLoadWidget(
               pullLoadWidgetControl, (BuildContext context, int index) => _renderItem(index),
               handleRefresh,
               onLoadMore,
               refreshKey: refreshIndicatorKey,
             ) ,
-          ),
         );
       },
     );

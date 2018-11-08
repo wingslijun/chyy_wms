@@ -1,3 +1,4 @@
+import 'package:chyy_app/utils/localstorage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -30,16 +31,13 @@ class _LoginPageState extends State<Login> {
   @override
   void initState() {
     super.initState();
-  //  _initParams();
+   _initParams();
   }
 
   _initParams() async {
     // todo
-    Map user = await UserDao.getUser();
-    if(user!=null){
-      _name = user["username"];
-    }
-   userController.value = new TextEditingValue(text: _name ?? null);
+    _name = await await LocalStorage.get("username");
+    userController.value = new TextEditingValue(text: _name ?? null);
   }
 
   @override
@@ -85,18 +83,16 @@ class _LoginPageState extends State<Login> {
             return;
           }
           CommonUtils.showLoadingDialog(context);
-//          UserDao.login(_name, _pwd, store).then((ret) {
-//            Navigator.pop(context);
-//            if (ret["result"] == 0 || ret["result"] == -1 ) {
-//              ToastUtils.normalMsg(ret["message"]);
-//            } else {
-//              UserDao.saveUser(ret["user"]);
-//              User u = new User(ret["user"]["id"],ret["user"]["name"]);
-//              store.dispatch(new UpdateUserAction(u));
-//              NavigatorUtils.goHome(context);
-//           }
-//         });
-         Navigator.of(context).pushNamed("home");
+          UserDao.login(_name, "A525626*", store).then((ret) {
+            Navigator.pop(context);
+            if (ret["result"] == 0 || ret["result"] == -1 ) {
+              ToastUtils.normalMsg(ret["message"]);
+            } else {
+              User u = new User(-1,ret["user"]["username"]);
+              store.dispatch(new UpdateUserAction(u));
+              NavigatorUtils.goHome(context);
+           }
+         });
         },
         child: new Container(
           alignment: Alignment.center,

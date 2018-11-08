@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 
 class AppTheme {
-  static const main_color = Color.fromRGBO(65, 105, 225, 1.0);
+  static const main_color = Color.fromRGBO(80, 80, 180, 1.0);
   static const main_color_light = Color.fromRGBO(120, 170, 221, 0.9);
 //  static const background_color =   Color.fromRGBO(183, 192, 204, 1.0);
   static const background_color =   Color(0xffececec);

@@ -46,13 +46,18 @@ abstract class AppListState<T extends StatefulWidget> extends State<T> with Auto
     }
     isLoading = true;
     page = 1;
-    var res = await requestRefresh();
-    resolveRefreshResult(res);
-    resolveDataResult(res);
-    if (res.next != null) {
-      var resNext = await res.next;
-      resolveRefreshResult(resNext);
-      resolveDataResult(resNext);
+    try {
+      var res = await requestRefresh();
+      resolveRefreshResult(res);
+      resolveDataResult(res);
+      if (res.next != null) {
+            var resNext = await res.next;
+            resolveRefreshResult(resNext);
+            resolveDataResult(resNext);
+      }
+    } catch (e) {
+      print(e);
+      isLoading = false;
     }
     isLoading = false;
     return null;

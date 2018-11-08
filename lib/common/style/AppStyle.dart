@@ -133,6 +133,12 @@ class AppConstant {
     fontSize: middleTextWhiteSize,
     fontWeight: FontWeight.bold,
   );
+  static const middleTextActionWhiteBold = TextStyle(
+    color: Color(AppColors.actionBlue),
+    fontSize: middleTextWhiteSize,
+    fontWeight: FontWeight.bold,
+  );
+
 
   static const normalText = TextStyle(
     color: Color(AppColors.mainTextColor),
@@ -167,6 +173,11 @@ class AppConstant {
     fontWeight: FontWeight.bold,
   );
 
+  static const normalTextRedWhiteBold = TextStyle(
+    color: Colors.red,
+    fontSize: normalTextSize,
+    fontWeight: FontWeight.bold,
+  );
   static const normalTextLight = TextStyle(
     color: Color(AppColors.primaryLightValue),
     fontSize: normalTextSize,
