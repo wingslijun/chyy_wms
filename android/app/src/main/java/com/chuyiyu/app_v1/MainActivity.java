@@ -20,10 +20,11 @@ import io.flutter.plugins.GeneratedPluginRegistrant;
 
 public class MainActivity extends FlutterActivity {
 
-  EventChannel.EventSink event1;
-
+  //EventChannel.EventSink event1;
+  SoundUtils mSoundUtils;
+    ScannerUtils2 s;
   public static final String STREAM = "chyy_scanner_plugin.barcode";
-    protected SoundUtils mSoundUtils;
+
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -31,12 +32,13 @@ public class MainActivity extends FlutterActivity {
     GeneratedPluginRegistrant.registerWith(this);
       mSoundUtils = SoundUtils.getInstance();
       mSoundUtils.init(this);
+
     new EventChannel(getFlutterView(), STREAM).setStreamHandler(
             new EventChannel.StreamHandler() {
               @Override
               public void onListen(Object args, final EventChannel.EventSink events) {
-                Log.w("ss", "56");
-                event1=events;
+               // event1=events;
+                s = new ScannerUtils2(events, mSoundUtils);
               }
               @Override
               public void onCancel(Object args) {
@@ -45,12 +47,12 @@ public class MainActivity extends FlutterActivity {
             }
     );
   }
+
+
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
-    System.out.println("keyCode"+keyCode);
-    if(keyCode==524){
-      ScannerUtils2 s  =  new ScannerUtils2(event1,mSoundUtils);
-      s.singleScanner();
+    if((keyCode == 524 || keyCode == 526)&& event.getRepeatCount()==0 ){
+       s.singleScanner(keyCode);
     }
     return super.onKeyDown(keyCode, event);
   }

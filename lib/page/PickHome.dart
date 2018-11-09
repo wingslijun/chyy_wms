@@ -161,12 +161,19 @@ class _PickHomeState extends State<PickHome> with AutomaticKeepAliveClientMixin<
             backgroundColor: AppTheme.main_color,
           ) , preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.06)),
           backgroundColor: AppTheme.background_color,
-          body:AppPullLoadWidget(
-              pullLoadWidgetControl, (BuildContext context, int index) => _renderItem(index),
-              handleRefresh,
-              onLoadMore,
-              refreshKey: refreshIndicatorKey,
-            ) ,
+          body:
+            new Scaffold(
+              appBar:new AppBar(
+                flexibleSpace: _renderHeader(store),
+              ) ,
+              body: AppPullLoadWidget(
+                pullLoadWidgetControl, (BuildContext context, int index) => _renderItem(index),
+                handleRefresh,
+                onLoadMore,
+                refreshKey: refreshIndicatorKey,
+              ) ,
+            )
+         
         );
       },
     );

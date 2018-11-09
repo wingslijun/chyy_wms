@@ -13,7 +13,7 @@ import 'package:redux/redux.dart';
 class PickingDao {
 
   static listPickings( page,pageSize) async {
-    List paramList = new List();
+/*    List paramList = new List();
     paramList.add({"Name":"PageIndex","Value":page});
     paramList.add({"Name":"PageSize","Value":"1"});
     paramList.add({"Name":"TrackingId","Value":""});
@@ -59,7 +59,7 @@ class PickingDao {
       return new DataResult(list, true);
     } else {
      return new DataResult(null, false);
-   }
+   }*/
     List<Picking> list = new List();
 
 
@@ -73,7 +73,7 @@ class PickingDao {
         suProductList.add(sunPicking2);
 /*        suProductList2.add(sunPicking1);
         suProductList2.add(sunPicking2);*/
-        Picking picking = new Picking("20180101","175789153536285600$i","2018-02-16 21:07:25","未拣货",suProductList);
+        Picking picking = new Picking("20180101","175789153536285600$i","2018-02-16 21:07:25","未拣货","",suProductList);
 
         list.add(picking);
 

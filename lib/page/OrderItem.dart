@@ -16,6 +16,11 @@ import 'package:chyy_app/common/style/theme.dart';
 import 'package:flutter/services.dart';
 
 class OrderItem extends StatefulWidget {
+
+  Picking pickingInfo;
+
+  OrderItem(this.pickingInfo);
+
   @override
   State<StatefulWidget> createState() => new _OrderItemState();
 }
@@ -58,8 +63,9 @@ class _OrderItemState extends State<OrderItem>
         0);
     suProductList.add(sunPicking);
     suProductList.add(sunPicking1);
-    pickingInfo = new Picking("20180101", "175789153536285600",
-        "2018-02-16 21:07:25", "未拣货", suProductList);
+//    pickingInfo = new Picking("20180101", "175789153536285600",
+//        "2018-02-16 21:07:25", "未拣货", suProductList);
+    pickingInfo = widget.pickingInfo;
     _status_channel
         .receiveBroadcastStream()
         .listen(_onGetCode, onError: _onGetCodeError);
@@ -241,17 +247,9 @@ class _OrderItemState extends State<OrderItem>
     return new StoreBuilder<AppState>(
       builder: (context, store) {
         return new Scaffold(
-          drawer: new HomeDrawer(),
+       //   drawer: new HomeDrawer(),
           appBar: PreferredSize(
               child: new AppBar(
-                leading: new Container(
-                    child: IconButton(
-                  padding: EdgeInsets.all(3.0),
-                  icon: Icon(Icons.menu),
-                  onPressed: () => Scaffold.of(context).openDrawer(),
-                  tooltip:
-                      MaterialLocalizations.of(context).openAppDrawerTooltip,
-                )),
                 title: new Text(
                   "货物打包",
                 ),

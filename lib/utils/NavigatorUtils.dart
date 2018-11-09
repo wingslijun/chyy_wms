@@ -1,3 +1,4 @@
+import 'package:chyy_app/page/OrderItem.dart';
 import 'package:flutter/material.dart';
 import 'package:chyy_app/page/ProcessMonitor.dart';
 import 'package:chyy_app/page/ServiceInfo.dart';
@@ -37,5 +38,11 @@ class NavigatorUtils {
         new MaterialPageRoute(builder: (context) => new SubDevicePage(subKey,name,deviceId,data)));
     // Navigator.pushReplacementNamed(context, ProcessMonitor.pName);
   }*/
+
+  static void goOrderItemPage(BuildContext context,data) {
+    Navigator.push(context,
+        new MaterialPageRoute(builder: (context) => new OrderItem(data)));
+    // Navigator.pushReplacementNamed(context, ProcessMonitor.pName);
+  }
 
 }

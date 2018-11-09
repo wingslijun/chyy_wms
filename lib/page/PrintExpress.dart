@@ -42,7 +42,7 @@ class _PrintExpressState extends State<PrintExpress>
     var sunPicking = new SubProduct("--", "--",
         "--", "--", "--", "--", 0, 0);
      suProductList.add(sunPicking);
-     pickingInfo = new Picking("--", "--", "--", "--", suProductList);
+     pickingInfo = new Picking("--", "--", "--", "--","-", suProductList);
     _tabController = new TabController(vsync: this, length: myTabs.length);
     _status_channel.receiveBroadcastStream().listen(_onGetCode, onError: _onGetCodeError);
   }
@@ -60,7 +60,8 @@ class _PrintExpressState extends State<PrintExpress>
   //扫描周转箱
   Future scan(code) async {
     try {
-      String barcode = await BarcodeScanner.scan();
+      String barcode = await BarcodeScanner.
+      scan();
       //根据条码查找订单;
       List<SubProduct> suProductList = new List();
       var sunPicking = new SubProduct("H021-01", "粉水400毫升（赠品套装随机）",
@@ -68,7 +69,7 @@ class _PrintExpressState extends State<PrintExpress>
       suProductList.add(sunPicking);
       suProductList.add(sunPicking);
       Picking picking = new Picking("20180101", "175789153536285600",
-          "2018-02-16 21:07:25", "未拣货", suProductList);
+          "2018-02-16 21:07:25", "未拣货","", suProductList);
       setState(() {
         pickingInfo = picking;
         List<Tab> tabs = <Tab>[];

@@ -12,12 +12,14 @@ class Picking extends Object {
   String orderNum;
   String time;
   String status;
+  String jhBarCode;
   List<SubProduct> subProducts;
   Picking(
     this.id,
     this.orderNum,
     this.time,
     this.status,
+    this.jhBarCode,
     this.subProducts
   );
 

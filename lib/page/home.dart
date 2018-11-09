@@ -70,7 +70,7 @@ class HomePage extends StatelessWidget {
         tabViews: [
           new Index(),
           new PickHome(),
-          new OrderItem(),
+          new PrintExpress(),
           new Index(),
         ],
         backgroundColor: AppTheme.background_color,

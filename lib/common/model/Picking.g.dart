@@ -12,6 +12,7 @@ Picking _$PickingFromJson(Map<String, dynamic> json) {
       json['orderNum'] as String,
       json['time'] as String,
       json['status'] as String,
+      json['jhBarCode'] as String,
       (json['subProducts'] as List)
           ?.map((e) =>
               e == null ? null : SubProduct.fromJson(e as Map<String, dynamic>))
@@ -23,6 +24,7 @@ Map<String, dynamic> _$PickingToJson(Picking instance) => <String, dynamic>{
       'orderNum': instance.orderNum,
       'time': instance.time,
       'status': instance.status,
+      'jhBarCode': instance.jhBarCode,
       'subProducts': instance.subProducts
     };
 

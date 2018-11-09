@@ -158,7 +158,7 @@ class _AppPullLoadWidgetState extends State<AppPullLoadWidget> {
         /// 不需要加载
         : new Container();
     return new Padding(
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(30.0),
       child: new Center(
         child: bottomWidget,
       ),
