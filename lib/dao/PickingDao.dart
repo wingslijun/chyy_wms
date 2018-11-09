@@ -63,14 +63,15 @@ class PickingDao {
     List<Picking> list = new List();
 
 
-      for(var i = 0;i<1;i++){
+      for(var i = 0;i<2;i++){
         List<SubProduct> suProductList = new List();
         List<SubProduct> suProductList2 = new List();
         var sunPicking1 = getSubProduct("H021-01","粉水400毫升（赠品套装随机）","lancome 兰蔻粉水买正装送小样礼盒","A0001","6950885582563","imgurl",1,0);
         var sunPicking2 = getSubProduct("H021-02","分类：2号;参考身高：8岁","娇韵诗白吸盘洗面奶200ml+爽肤水200ml套装爽肤水200ml套装","B0002","6922266445057","imgurl2",3,0);
         var sunPicking3 = getSubProduct("Hgsf-02","","爽肤水200ml","B0002","69226445057","imgurl2",3,1);
         suProductList.add(sunPicking1);
-        suProductList.add(sunPicking2);
+       suProductList.add(sunPicking2);
+     //   suProductList.add(sunPicking3);
 /*        suProductList2.add(sunPicking1);
         suProductList2.add(sunPicking2);*/
         Picking picking = new Picking("20180101","175789153536285600$i","2018-02-16 21:07:25","未拣货","",suProductList);

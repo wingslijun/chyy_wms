@@ -24,9 +24,9 @@ public class ScannerUtils2 implements ScannerManager.IScannerStatusListener {
 
     public void singleScanner(int keyCode){
         this.keyCode = keyCode;
-        if(!scannerManager.isScanConnect()){
+      //  if(!scannerManager.isScanConnect()){
             scannerManager.connectDecoderSRV();
-        }
+        //}
         scannerManager.singleScan();
     }
 

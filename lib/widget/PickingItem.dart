@@ -23,158 +23,26 @@ class PickingItem extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return new _PickingItemState();
   }
 }
   class _PickingItemState extends State<PickingItem>{
-  String barcode = "";
 
-  static const EventChannel _status_channel =
-  const EventChannel('chyy_scanner_plugin.barcode');
-  var _jhbarcode = "";
-
-  StreamSubscription _barsubscription = null;
-
-  @override
-  void initState() {
-    _barsubscription =   _status_channel
-        .receiveBroadcastStream()
-        .listen(_onGetCode, onError: _onGetCodeError);
-  }
-  void _disableBar() {
-    if (_barsubscription != null) {
-      _barsubscription.cancel();
-      _barsubscription = null;
-    }
-  }
+  var barcode;
 
   @override
   void dispose() {
     super.dispose();
-   // _disableBar();
   }
-  bool containsCode = false;
-  void _onGetCode(Object result) {
-    print(result);
-    var resultMap = result as Map;
-    var bar524code = resultMap[524];
-    var bar526code = resultMap[526];
-    if(bar524code != null ){
-      setState(() {
-        for (var i = 0; i < widget.pickingInfo.subProducts.length; i++) {
-          var subProduct = widget.pickingInfo.subProducts[i];
-          if (subProduct.code == bar524code) {
-            if (subProduct.areadyNum < subProduct.num) {
-              //PickingDao.updateOrderProductNum(orderId,code,1).then((ret){
-//              setState(() {
-              subProduct = new SubProduct(
-                  subProduct.id,
-                  subProduct.sku,
-                  subProduct.name,
-                  subProduct.location,
-                  subProduct.code,
-                  subProduct.img,
-                  subProduct.num,
-                  subProduct.areadyNum + 1);
-//              });
-              if (subProduct.areadyNum < subProduct.num) {
-                //  scan(subProduct.code);
-              }
-              // });
-              widget.pickingInfo.subProducts[i] = subProduct;
-              widget.onChanged(widget.pickingInfo);
-            } else {
-              ToastUtils.normalMsg("此单此物已拣够。。");
-            }
-            containsCode = true;
-            break;
-          }
-        }
-        if(!containsCode){
-          ToastUtils.normalMsg("请注意！本单不包含此条码产品。");
-        }
-      });
-    }
-    List jhList = ['062107085205'];
-
-    if(bar526code!=null){
-      if(jhList.contains(bar526code)){
-        if(widget.pickingInfo.jhBarCode == ""){
-          widget.pickingInfo.jhBarCode = bar526code;
-          widget.onChanged(widget.pickingInfo);
-        }
-      }else{
-        ToastUtils.errMsg("此条码不是拣货箱条码");
-      }
-    }
+  var picking ;
+  @override
+  void initState() {
+    picking =  widget.pickingInfo;
   }
-
-  void _onGetCodeError(Object event) {
-    ToastUtils.errMsg(event);
-  }
-  //扫描
-//  Future scan(code) async {
-//    try {
-//      String barcode = await BarcodeScanner.scan();
-//      print('$code $barcode');
-//      if (code != barcode) {
-//        ToastUtils.errMsg("条码不符，请确认商品！");
-//      } else {
-//        for (var i = 0; i < widget.pickingInfo.subProducts.length; i++) {
-//          var subProduct = widget.pickingInfo.subProducts[i];
-//          if (subProduct.code == barcode) {
-//            if (subProduct.areadyNum < subProduct.num) {
-//              //PickingDao.updateOrderProductNum(orderId,code,1).then((ret){
-////              setState(() {
-//              subProduct = new SubProduct(
-//                  subProduct.id,
-//                  subProduct.sku,
-//                  subProduct.name,
-//                  subProduct.location,
-//                  subProduct.code,
-//                  subProduct.img,
-//                  subProduct.num,
-//                  subProduct.areadyNum + 1);
-////              });
-//              if (subProduct.areadyNum < subProduct.num) {
-//                scan(subProduct.code);
-//              }
-//              // });
-//              widget.pickingInfo.subProducts[i] = subProduct;
-//              widget.onChanged(widget.pickingInfo);
-//            } else {
-//              ToastUtils.normalMsg("此单此物已拣够。。");
-//            }
-//            break;
-//          }
-//        }
-//      }
-//    } on PlatformException catch (e) {
-//      if (e.code == BarcodeScanner.CameraAccessDenied) {
-//        this.barcode = 'The user did not grant the camera permission!';
-//      } else {
-//        this.barcode = 'Unknown error: $e';
-//      }
-//    } on FormatException {
-//      this.barcode =
-//          'null (User returned using the "back"-button before scanning anything. Result)';
-//    } catch (e) {
-//      this.barcode = 'Unknown error: $e';
-//    }
-//  }
-
-  //扫描权限
-  Permission permission = Permission.Camera;
-
-  requestPermission() async {
-    final res = await SimplePermissions.requestPermission(permission);
-    print("permission request result is " + res.toString());
-  }
-
-  checkPermission() async {
-    bool res = await SimplePermissions.checkPermission(permission);
-    print("permission is " + res.toString());
+  void _handleTapboxChanged(Picking newPicking) {
+    setState(() {
+      picking = newPicking;
+    });
   }
 
   //弹出确认框
@@ -350,99 +218,41 @@ class PickingItem extends StatefulWidget {
                   child: new Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-//                      new Container(
-//                        child: new Text("H022-01"),
-//                        padding: EdgeInsets.only(top: 2.0, bottom: 2.0),
-//                      ),
-                      Container(
-                          padding: EdgeInsets.only(top: 2.0, bottom: 2.0),
+                      new Container(
+                          padding: EdgeInsets.only(top: 1.0),
                           child: new Text("条码：${item.code}")),
                       new Container(
                         child: new Text("库位：${item.location}"),
-                        padding: EdgeInsets.only(top: 2.0, bottom: 2.0),
+                        padding: EdgeInsets.only(top: 1.0),
+                      ),
+                      new Container(
+                        child: new Text(
+                          "品名: ${item.name}",
+                          softWrap: true,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                      Container(
+                          child: new Text("分类：${item.sku}",   overflow: TextOverflow.ellipsis,)),
+                      new Row(
+                        children: <Widget>[
+                          new Text("数量：X "),
+                          new Text(
+                            "${item.num}",
+                            style: new TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16.0,
+                                color: Colors.red),
+                          ),
+                          new Text("件"),
+                        ],
                       ),
                     ],
                   ),
                 ),
               ],
             ),
-            new Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                new Container(
-                  padding: EdgeInsets.all(3.0),
-                  child: new Text(
-                    "品名: ${item.name}",
-                    softWrap: true,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 3,
-                    textAlign: TextAlign.left,
-                  ),
-                ),
-                Container(
-                    padding: EdgeInsets.all(3.0),
-                    child: new Text("分类：${item.sku}")),
-                new Container(
-                    padding: EdgeInsets.only(left: 3.0, top: 8.0, right: 3.0),
-                    child: new Row(
-                      children: <Widget>[
-                        // new Text("X ${item.num}件"),
-                        new Row(
-                          children: <Widget>[
-                            new Text("数量：X "),
-                            new Text(
-                              "${item.num}",
-                              style: new TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16.0,
-                                  color: Colors.red),
-                            ),
-                            new Text("件"),
-                          ],
-                        ),
-                        new Expanded(
-                            child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            new Container(
-                              child: new Text(
-                                "已拣：${item.areadyNum}件",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5.0),
-                                  color: Colors.green,
-                                  border: Border.all(
-                                      color: Colors.green, width: 1.0)),
-                            ),
-                            new Container(
-                                height: 36.0,
-                                margin: EdgeInsets.only(
-                                    left: 3.0, right: 6.0, bottom: 2.0),
-                                decoration: BoxDecoration(
-                                  color: Colors.pinkAccent,
-                                  borderRadius: new BorderRadius.all(
-                                      new Radius.circular(10.0)),
-                                ),
-                                child: new MaterialButton(
-                                  padding:
-                                      EdgeInsets.only(left: 4.0, right: 4.0),
-                                  height: 10.0,
-//                                              minWidth: MediaQuery.of(context).size.width * 0.2,
-                                  child: new Text("扫码拣货",
-                                      textScaleFactor: 1.0,
-                                      style:
-                                          new TextStyle(color: Colors.white)),
-                                  onPressed: () {
-                                  //  scan(item.code);
-                                  },
-                                ))
-                          ],
-                        )),
-                      ],
-                    ))
-              ],
-            )
           ],
         ),
       ),
@@ -492,7 +302,9 @@ class PickingItem extends StatefulWidget {
                   color: AppTheme.background_color,
                 ),
                 child: GestureDetector(
-                  onTap:(){ NavigatorUtils.goOrderItemPage(context, widget.pickingInfo);},
+                  onTap:(){
+
+                    NavigatorUtils.goOrderItemPage(context, picking,_handleTapboxChanged);},
                   child: new Card(
                       child: new Container(
                     padding: EdgeInsets.only(
@@ -526,7 +338,15 @@ class PickingItem extends StatefulWidget {
                                           new Row(
                                             children: <Widget>[
                                               new Text(
-                                                "批次：${widget.pickingInfo.id}",
+                                                "发货批次：${widget.pickingInfo.id}",
+                                                style: AppConstant.middleTextBold,
+                                              ),
+                                            ],
+                                          ),
+                                          new Row(
+                                            children: <Widget>[
+                                              new Text(
+                                                "计划批次：${widget.pickingInfo.id}",
                                                 style: AppConstant.middleTextBold,
                                               ),
                                             ],
@@ -573,7 +393,7 @@ class PickingItem extends StatefulWidget {
                                                 color: Colors.lightGreen,
                                                 width: 1.0)),
                                         child: new Text(
-                                          "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+                                          "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
                                           softWrap: true,
                                           overflow: TextOverflow.fade,
                                           textScaleFactor: 1.0,
@@ -588,118 +408,10 @@ class PickingItem extends StatefulWidget {
                           ),
                         ),
                         new Container(
-                            width: 350.0,
-                            height: 300.0,
                             padding: EdgeInsets.all(2.0),
-                            child: new DefaultTabController(
-                              length: myTabs.length,
-                              child: new Scaffold(
-                                appBar: PreferredSize(
-                                    child: new AppBar(
-                                      backgroundColor: Colors.green,
-                                      title: new TabBar(
-                                        tabs: myTabs,
-                                        isScrollable: true,
-                                        indicatorColor:Colors.white
-                                      ),
-                                    ),
-                                    preferredSize: Size.fromHeight(
-                                        MediaQuery.of(context).size.height *
-                                            0.05)),
-                                body: new TabBarView(
-                                  children: myTabs.map((Tab tab) {
-                                    var key = tab.key.toString();
-                                    print(key.substring(3, key.length - 3));
-                                    key = key.substring(3, key.length - 3);
-                                    return _buildProduct(
-                                        widget.pickingInfo.subProducts[int.parse(key)]);
-                                  }).toList(),
-                                ),
-                              ),
+                            child: new Column(
+                              children: _buildProductItem(),
                             )),
-                        new Container(
-                            padding: EdgeInsets.only(
-                                top: 8.0, right: 8.0, bottom: 8.0),
-                            child: Column(
-                              children: <Widget>[
-                                new Row(
-                                  children: <Widget>[
-                                    new Container(
-                                      margin: EdgeInsets.only(left: 2.0),
-                                      child: new Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          new Text("拣货箱：${ widget.pickingInfo.jhBarCode}",
-                                         ),
-                                      Container(
-                                    child: new Text(
-                                    "${widget.pickingInfo.time}",
-
-                                  ),)
-                                        ],
-                                      ),
-                                    ),
-                                    new Expanded(
-                                        child: new Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: <Widget>[
-                                        new Container(
-                                            height: 40.0,
-                                            margin: EdgeInsets.only(
-                                                left: 3.0, right: 3.0),
-                                            decoration: BoxDecoration(
-                                              color: AppTheme.main_color,
-                                              borderRadius: new BorderRadius.all(
-                                                  new Radius.circular(10.0)),
-                                            ),
-                                            child: new MaterialButton(
-                                              padding: EdgeInsets.only(
-                                                  left: 4.0, right: 4.0),
-                                              height: 10.0,
-                                              minWidth: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.2,
-                                              child: new Text("绑定拣货箱",
-                                                  textScaleFactor: 1.0,
-                                                  style: new TextStyle(
-                                                      color: Colors.white)),
-                                              onPressed: () {
-                                                _bindBox();
-                                              },
-                                            )),
-                                        new Container(
-                                            height: 40.0,
-                                            margin: EdgeInsets.only(
-                                                left: 3.0, right: 3.0),
-                                            decoration: BoxDecoration(
-                                              color: color,
-                                              borderRadius: new BorderRadius.all(
-                                                  new Radius.circular(10.0)),
-                                            ),
-                                            child: new MaterialButton(
-                                              padding: EdgeInsets.only(
-                                                  left: 4.0, right: 4.0),
-                                              height: 10.0,
-                                              minWidth: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                                  0.2,
-                                              child: new Text(
-                                                  "${widget.pickingInfo.status != '完成拣货' ? '完成拣单' : '已完成拣单'}",
-                                                  textScaleFactor: 1.0,
-                                                  style: new TextStyle(
-                                                      color: Colors.white)),
-                                              onPressed: () {
-                                                _completePickOrder(context);
-                                              },
-                                            )),
-                                      ],
-                                    ))
-                                  ],
-                                ),
-                              ],
-                            ))
                       ],
                     ),
                   )),

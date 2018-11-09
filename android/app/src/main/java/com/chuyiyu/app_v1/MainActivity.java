@@ -52,7 +52,9 @@ public class MainActivity extends FlutterActivity {
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     if((keyCode == 524 || keyCode == 526)&& event.getRepeatCount()==0 ){
-       s.singleScanner(keyCode);
+        if(s!=null ){
+            s.singleScanner(keyCode);
+        }
     }
     return super.onKeyDown(keyCode, event);
   }

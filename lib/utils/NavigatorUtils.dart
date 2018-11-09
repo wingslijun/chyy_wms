@@ -1,3 +1,4 @@
+import 'package:chyy_app/common/model/Picking.dart';
 import 'package:chyy_app/page/OrderItem.dart';
 import 'package:flutter/material.dart';
 import 'package:chyy_app/page/ProcessMonitor.dart';
@@ -39,9 +40,9 @@ class NavigatorUtils {
     // Navigator.pushReplacementNamed(context, ProcessMonitor.pName);
   }*/
 
-  static void goOrderItemPage(BuildContext context,data) {
+  static void goOrderItemPage(BuildContext context,Picking data,ValueChanged<Picking> change) {
     Navigator.push(context,
-        new MaterialPageRoute(builder: (context) => new OrderItem(data)));
+        new MaterialPageRoute(builder: (context) => new OrderItem(pickingInfo: data,onChanged: change)));
     // Navigator.pushReplacementNamed(context, ProcessMonitor.pName);
   }
 

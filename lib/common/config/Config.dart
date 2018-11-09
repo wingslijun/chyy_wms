@@ -1,5 +1,5 @@
 class Config {
-  static const PAGE_SIZE = 1;
+  static const PAGE_SIZE = 2;
   static const DEBUG = true;
 
 

@@ -492,7 +492,9 @@ class PickingItem extends StatefulWidget {
                   color: AppTheme.background_color,
                 ),
                 child: GestureDetector(
-                  onTap:(){ NavigatorUtils.goOrderItemPage(context, widget.pickingInfo);},
+                  onTap:(){
+                    //NavigatorUtils.goOrderItemPage(context, widget.pickingInfo);
+                  },
                   child: new Card(
                       child: new Container(
                     padding: EdgeInsets.only(
